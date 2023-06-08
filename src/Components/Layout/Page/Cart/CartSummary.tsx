@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useUpdateShoppingCartMutation } from '../../../../Apis/shoppingCartApi';
 import { cartItemModel } from '../../../../Interfaces';
