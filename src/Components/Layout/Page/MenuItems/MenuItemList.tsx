@@ -1,29 +1,31 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useGetMenuItemsQuery } from '../../../../Apis/menuItemApi';
 import { menuItemModel } from '../../../../Interfaces';
+import { setMenuItem } from '../../../../Storage/Redux/menuItemSlice';
 import MenuItemCard from './MenuItemCard';
 
 function MenuItemList() {
-  const [menuItems, setMenuItems] = useState<menuItemModel[]>([]);
+  // const [menuItems, setMenuItems] = useState<menuItemModel[]>([]);
 
-  const getData = async () => {
-    const { data } = await axios.get(
-      'https://redmangoapi20230605165816.azurewebsites.net/api/MenuItem'
-    );
-    console.log(data);
-    if (data) {
-      setMenuItems(data.result);
-    }
-  };
+  const dispatch = useDispatch();
+  const { data, isLoading } = useGetMenuItemsQuery(null);
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (!isLoading) {
+      dispatch(setMenuItem(data.result));
+    }
+  }, [isLoading]);
+
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
 
   return (
     <div className="container row">
-      {menuItems.length > 0 &&
-        menuItems.map((menuItem, index) => (
+      {data.result.length > 0 &&
+        data.result.map((menuItem: menuItemModel, index: number) => (
           <MenuItemCard menuItem={menuItem} key={index} />
         ))}
     </div>
