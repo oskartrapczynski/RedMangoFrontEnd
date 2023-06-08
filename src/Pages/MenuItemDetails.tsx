@@ -1,13 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetMenuItemByIdQuery } from '../Apis/menuItemApi';
+import { useUpdateShoppingCartMutation } from '../Apis/shoppingCartApi';
 
 const MenuItemDetails = () => {
   const { menuItemId } = useParams();
   const { data, isLoading } = useGetMenuItemByIdQuery(menuItemId);
   const navigate = useNavigate();
 
-  console.log(data);
+  const [quantity, setQuantity] = useState(1);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [updateShoppingCart] = useUpdateShoppingCartMutation();
+
+  // user id admin 3db7c46b-8634-4291-ac13-9943ec862e51
+
+  const handleQuantity = (counteer: number) => {
+    let newQuantity = quantity + counteer;
+    if (newQuantity === 0) {
+      newQuantity = 1;
+    }
+    setQuantity(newQuantity);
+  };
+
+  // console.log(data);
+
+  const handleAddToCart = async (menuItemId: number) => {
+    setIsAddingToCart(true);
+
+    const response = await updateShoppingCart({
+      userId: '3db7c46b-8634-4291-ac13-9943ec862e51',
+      menuItemId,
+      updateQuantityBy: quantity,
+    });
+
+    console.log(response);
+
+    setIsAddingToCart(false);
+  };
 
   return (
     <div className="container pt-4 pt-md-5">
@@ -40,18 +69,23 @@ const MenuItemDetails = () => {
               style={{ border: '1px solid #333', borderRadius: '30px' }}
             >
               <i
-                className="bi bi-dash p-1"
+                onClick={() => handleQuantity(-1)}
+                className="bi bi-dash p-1 disabled"
                 style={{ fontSize: '25px', cursor: 'pointer' }}
               ></i>
-              <span className="h3 mt-3 px-3">XX</span>
+              <span className="h3 mt-3 px-3">{quantity}</span>
               <i
+                onClick={() => handleQuantity(+1)}
                 className="bi bi-plus p-1"
                 style={{ fontSize: '25px', cursor: 'pointer' }}
               ></i>
             </span>
             <div className="row pt-4">
               <div className="col-5">
-                <button className="btn btn-success form-control">
+                <button
+                  className="btn btn-success form-control"
+                  onClick={() => handleAddToCart(data.result?.id)}
+                >
                   Add to Cart
                 </button>
               </div>
