@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useUpdateShoppingCartMutation } from '../../../../Apis/shoppingCartApi';
+import { colors } from '../../../../Colors';
 import { menuItemModel } from '../../../../Interfaces';
+import { MiniLoader } from '../Common';
 
 interface Props {
   menuItem: menuItemModel;
@@ -19,8 +21,6 @@ const MenuItemCard = ({ menuItem }: Props) => {
       menuItemId,
       updateQuantityBy: 1,
     });
-
-    console.log(response);
 
     setIsAddingToCart(false);
   };
@@ -68,10 +68,7 @@ const MenuItemCard = ({ menuItem }: Props) => {
                 right: '15px',
               }}
             >
-              <div
-                className="spinner-border text-danger"
-                style={{ scale: '100%' }}
-              ></div>
+              <MiniLoader color={colors.dangerRed} />
             </div>
           ) : (
             <i

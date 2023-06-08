@@ -2,8 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useGetMenuItemsQuery } from '../../../../Apis/menuItemApi';
+import { colors } from '../../../../Colors';
 import { menuItemModel } from '../../../../Interfaces';
 import { setMenuItem } from '../../../../Storage/Redux/menuItemSlice';
+import { Loader } from '../Common';
 import MenuItemCard from './MenuItemCard';
 
 function MenuItemList() {
@@ -19,7 +21,7 @@ function MenuItemList() {
   }, [isLoading]);
 
   if (isLoading) {
-    return <div>Loading ...</div>;
+    return <Loader color={colors.successGreen} />;
   }
 
   return (

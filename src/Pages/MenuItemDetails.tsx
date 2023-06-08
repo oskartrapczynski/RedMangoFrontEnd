@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetMenuItemByIdQuery } from '../Apis/menuItemApi';
 import { useUpdateShoppingCartMutation } from '../Apis/shoppingCartApi';
+import { colors } from '../Colors';
+import { Loader } from '../Components/Layout/Page/Common';
 
 const MenuItemDetails = () => {
   const { menuItemId } = useParams();
@@ -114,7 +116,7 @@ const MenuItemDetails = () => {
           className="d-flex justify-content-center"
           style={{ width: '100%' }}
         >
-          <div>Loading...</div>
+          <Loader color={colors.successGreen} />
         </div>
       )}
     </div>
